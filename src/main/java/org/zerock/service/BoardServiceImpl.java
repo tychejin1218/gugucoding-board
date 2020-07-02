@@ -29,7 +29,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<BoardVO> getList() {
-
+		log.info("boardServiceImpl ============");
 		return boardMapper.getList();
 	}
 
