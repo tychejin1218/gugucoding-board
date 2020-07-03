@@ -35,7 +35,9 @@ public class BoardControllerTest {
 	@Test
 	public void testList() throws Exception {
 
-		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/board/list"))
+		log.info(mockMvc.perform(MockMvcRequestBuilders.get("/board/list")
+		                                               .param("pageNum", "2")
+		                                               .param("amount", "10"))
 		                .andReturn()
 		                .getModelAndView()
 		                .getModelMap());

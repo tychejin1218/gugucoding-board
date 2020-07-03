@@ -90,8 +90,7 @@ $(document).ready(function() {
 	      	var keywordTag = $("input[name='keyword']").clone();
 	      	var typeTag = $("input[name='type']").clone();      
 	      
-	      	formObj.empty();
-	      
+	      	formObj.empty();	      
 	      	formObj.append(pageNumTag);
 	      	formObj.append(amountTag);
 	      	formObj.append(keywordTag);

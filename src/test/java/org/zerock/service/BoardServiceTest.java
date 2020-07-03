@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.zerock.domain.BoardVO;
+import org.zerock.domain.Criteria;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -42,7 +43,7 @@ public class BoardServiceTest {
 	@Test
 	public void testGetList() {
 
-		boardService.getList()
+		boardService.getList(new Criteria(2, 10))
 		            .forEach(board -> log.info(board));
 	}
 
@@ -67,10 +68,10 @@ public class BoardServiceTest {
 
 		log.info("게시물 수정 여부 : " + boardService.modify(boardVO));
 	}
-	
+
 	@Test
 	public void testDelete() {
-		
+
 		log.info("게시물 삭제 여부 : " + boardService.remove(9L));
 	}
 }

@@ -11,6 +11,37 @@
 		 WHERE BNO <![CDATA[>]]> 0
 	
 	</select>
+	
+	<select id="getListWithPaging" resultType="org.zerock.domain.BoardVO">
+	
+		SELECT T1.BNO
+			 , T1.TITLE
+			 , T1.CONTENT
+			 , T1.WRITER
+			 , T1.REGDATE
+			 , T1.UPDATEDATE
+		  FROM (
+					SELECT ROWNUM RN
+						 , BNO
+						 , TITLE
+						 , CONTENT
+						 , WRITER
+						 , REGDATE
+						 , UPDATEDATE 
+			          FROM TBL_BOARD
+			         WHERE ROWNUM <![CDATA[<=]]> #{pageNum} * #{amount}  
+		  		) T1
+		 WHERE RN <![CDATA[>]]> (#{pageNum} -1) * #{amount}
+	
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+	
+		SELECT COUNT(*)
+		  FROM TBL_BOARD
+		 WHERE BNO <![CDATA[>]]> 0
+	
+	</select>
 
 	<insert id="insert">
 		
