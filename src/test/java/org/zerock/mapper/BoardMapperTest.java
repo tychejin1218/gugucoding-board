@@ -57,12 +57,12 @@ public class BoardMapperTest {
 	@Test
 	public void testInsertSelectKey01() {
 
-		for (int a = 0; a < 1000; a++) {
+		for (int a = 0; a < 100; a++) {
 
 			BoardVO boardVO = new BoardVO();
 			boardVO.setTitle("제목_" + a);
 			boardVO.setContent("내용_" + a);
-			boardVO.setWriter("작성자_" + a);
+			boardVO.setWriter("작성자_검색_" + a);
 
 			boardMapper.insertSelectKey(boardVO);
 		}
@@ -106,6 +106,18 @@ public class BoardMapperTest {
 		Criteria cri = new Criteria();
 		cri.setPageNum(3);
 		cri.setAmount(10);
+
+		List<BoardVO> list = boardMapper.getListWithPaging(cri);
+
+		list.forEach(board -> log.info(board));
+	}
+	
+	@Test
+	public void testSearch() {
+
+		Criteria cri = new Criteria();
+		cri.setKeyword("검색");
+		cri.setType("TC");
 
 		List<BoardVO> list = boardMapper.getListWithPaging(cri);
 

@@ -62,10 +62,7 @@ public class BoardController {
 			rttr.addFlashAttribute("result", "success");
 		}
 
-		rttr.addAttribute("pageNum", cri.getPageNum());
-		rttr.addAttribute("amount", cri.getAmount());
-
-		return "redirect:/board/list";
+		return "redirect:/board/list" + cri.getListLink();
 	}
 
 	@PostMapping("/remove")
@@ -75,9 +72,6 @@ public class BoardController {
 			rttr.addFlashAttribute("result", "success");
 		}
 
-		rttr.addAttribute("pageNum", cri.getPageNum());
-		rttr.addAttribute("amount", cri.getAmount());
-
-		return "redirect:/board/list";
+		return "redirect:/board/list" + cri.getListLink();
 	}
 }
