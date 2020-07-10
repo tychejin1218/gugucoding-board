@@ -10,6 +10,29 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+<style>
+	.uploadResult {
+		width: 100%;
+		background-color: gray;
+	}
+	
+	.uploadResult ul {
+		display: flex;
+		flex-flow: row;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.uploadResult ul li {
+		list-style: none;
+		padding: 10px;
+	}
+	
+	.uploadResult ul li img {
+		width: 20px;
+	}
+</style>
+
 <script>
 /* $(document).ready(function(){
 	
@@ -63,6 +86,8 @@ $(document).ready(function(){
 		return true;
 	}
 	
+	var cloneObj = $(".uploadDiv").clone();
+	
 	$("#uploadBtn").on("click", function(e) {
 
 		var formData = new FormData();
@@ -78,7 +103,7 @@ $(document).ready(function(){
 			if (!checkExtension(files[i].name, files[i].size)) {
 				return false;
 			}
-
+			
 			formData.append("uploadFile", files[i]);
 		}
 
@@ -90,19 +115,78 @@ $(document).ready(function(){
 		 	type: "POST",
 		 	dataType : "json",
 		 	success: function(result){
+		 		
 		 		console.log(result);
+		 		
+		 		showUploadedFile(result);
+		 		
+		 		// <input type='file'>의 초기화
+		 		$(".uploadDiv").html(cloneObj.html());
 		 	}
 		});
 	});
+	
+	var uploadResult = $(".uploadResult ul");
+
+	/* function showUploadedFile(uploadResultArr) {
+
+		var str = "";
+
+	 	$(uploadResultArr).each(function(i, obj) {
+	 		str += "<li>" + obj.fileName + "</li>";
+	 	});
+	 	
+	 	uploadResult.append(str);
+	} */
+		
+	/* function showUploadedFile(uploadResultArr) {
+
+		var str = "";
+	
+		$(uploadResultArr).each(function(i, obj) {
+			if (!obj.image) {
+				str += "<li><img src='/resources/img/attach.png'>"+ obj.fileName + "</li>";
+			} else {
+				str += "<li>" + obj.fileName + "</li>";
+			}
+		});
+
+		uploadResult.append(str);
+	} */
+	
+	function showUploadedFile(uploadResultArr){
+	    
+	    var str = "";
+	    
+	    $(uploadResultArr).each(function(i, obj){
+	    	
+	    	if(!obj.image){
+	        	
+	    		str += "<li><img src='/resources/img/attach.png'>"+obj.fileName+"</li>";
+	    		
+	      	} else {
+	        	
+	      		var fileCallPath =  encodeURIComponent( obj.uploadPath + "/s_" + obj.uuid+"_" + obj.fileName);
+	        	
+	        	str += "<li><img src='/display?fileName="+fileCallPath+"'><li>";
+	      	}
+	    });
+	    
+		uploadResult.append(str);
+	}
 });
 </script>
 	
 <h1>Upload with Ajax</h1>
 	
 <div class="uploadDiv">
-	<input type="file" name="uploadFile" multiple/>
+	<input type="file" name="uploadFile" multiple />
 </div>
-	
+
+<div class="uploadResult">
+	<ul></ul>
+</div>
+		
 <button id="uploadBtn">Upload</button>
 
 </body>
