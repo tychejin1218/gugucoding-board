@@ -29,7 +29,7 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	@Override
 	public void register(BoardVO boardVO) {
-		
+
 		boardMapper.insertSelectKey(boardVO);
 
 		log.info("register......" + boardVO);
@@ -69,11 +69,17 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.update(boardVO) == 1;
 	}
 
+	@Transactional
 	@Override
 	public boolean remove(Long bno) {
+
+		log.info("remove...." + bno);
+
+		boardAttachMapper.deleteAll(bno);
+
 		return boardMapper.delete(bno) == 1;
 	}
-	
+
 	@Override
 	public List<BoardAttachVO> getAttachList(Long bno) {
 

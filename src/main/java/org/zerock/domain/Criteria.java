@@ -34,10 +34,11 @@ public class Criteria {
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
 		                                                   .queryParam("pageNum", this.pageNum)
-		                                                   .queryParam("amount", this.amount)
-		                                                   .queryParam("type", this.type)
-		                                                   .queryParam("keyword", this.keyword);
+		                                                   .queryParam("amount", this.getAmount())
+		                                                   .queryParam("type", this.getType())
+		                                                   .queryParam("keyword", this.getKeyword());
 
 		return builder.toUriString();
+
 	}
 }
