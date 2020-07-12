@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.zerock.domain.BoardAttachVO;
 import org.zerock.domain.BoardVO;
 import org.zerock.domain.Criteria;
 import org.zerock.mapper.BoardAttachMapper;
@@ -71,5 +72,13 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean remove(Long bno) {
 		return boardMapper.delete(bno) == 1;
+	}
+	
+	@Override
+	public List<BoardAttachVO> getAttachList(Long bno) {
+
+		log.info("get Attach list by bno" + bno);
+
+		return boardAttachMapper.findByBno(bno);
 	}
 }
