@@ -60,7 +60,7 @@
 			 , FILENAME
 			 , FILETYPE
 			 , BNO 
-		  FROM BORAD.TBL_ATTACH 
+		  FROM BOARD.TBL_ATTACH		  
 		 WHERE UPLOADPATH = TO_CHAR(SYSDATE -1 ,'yyyy\mm\dd')		
 
 	</select>
