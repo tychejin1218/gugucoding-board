@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,11 +46,13 @@ public class BoardController {
 	}
 
 	@GetMapping("/register")
+	@PreAuthorize("isAuthenticated()")
 	public void register() {
 
 	}
 
 	@PostMapping("/register")
+	@PreAuthorize("isAuthenticated()")
 	public String register(BoardVO boardVO, RedirectAttributes rttr) {
 
 		log.info("==========================");
@@ -76,9 +79,12 @@ public class BoardController {
 		model.addAttribute("board", boardService.get(bno));
 	}
 
+	@PreAuthorize("principal.username == #boardVO.writer")
 	@PostMapping("/modify")
 	public String modify(BoardVO boardVO, @ModelAttribute("cri") Criteria cri, RedirectAttributes rttr) {
 
+		log.info("modify:" + boardVO);
+		
 		if (boardService.modify(boardVO)) {
 			rttr.addFlashAttribute("result", "success");
 		}

@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
+<%@ taglib uri="http://www.springframework.org/security/tags" prefix="sec" %>
+
 <%@include file="../includes/header.jsp"%>
 
 <style>
@@ -279,6 +281,8 @@ $(document).ready(function() {
 	
 	      		<form role="form" action="/board/modify" method="post">
 	      
+	      			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+	      
 	        		<input type='hidden' name='pageNum' value='<c:out value="${cri.pageNum }"/>'>
 	        		<input type='hidden' name='amount' value='<c:out value="${cri.amount }"/>'>
 		    		<input type='hidden' name='type' value='<c:out value="${cri.type }"/>'>
@@ -314,8 +318,14 @@ $(document).ready(function() {
 		  				<input class="form-control" name='updateDate' value='<fmt:formatDate pattern = "yyyy/MM/dd" value = "${board.updateDate}" />'  readonly="readonly">            
 					</div>
 		
-					<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
-		  			<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
+					<sec:authentication property="principal" var="pinfo"/>
+       				<sec:authorize access="isAuthenticated()">
+       					<c:if test="${pinfo.username eq board.writer}">
+	        				<button type="submit" data-oper='modify' class="btn btn-default">Modify</button>
+			  				<button type="submit" data-oper='remove' class="btn btn-danger">Remove</button>
+       					</c:if>
+       				</sec:authorize>
+        			
 		  			<button type="submit" data-oper='list' class="btn btn-info">List</button>
 				</form>
 			</div>

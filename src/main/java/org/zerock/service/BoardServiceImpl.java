@@ -71,8 +71,7 @@ public class BoardServiceImpl implements BoardService {
 
 		boolean modifyResult = boardMapper.update(boardVO) == 1;
 
-		if (modifyResult && boardVO.getAttachList()
-		                           .size() > 0) {
+		if (modifyResult && boardVO.getAttachList() != null) {
 
 			boardVO.getAttachList()
 			       .forEach(attach -> {
