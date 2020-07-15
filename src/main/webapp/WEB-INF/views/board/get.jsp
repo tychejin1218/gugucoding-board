@@ -171,6 +171,14 @@ $(document).ready(function () {
 	});     
     
    
+	var replyer = null;
+    
+    <sec:authorize access="isAuthenticated()">
+    	replyer = '<sec:authentication property="principal.username"/>';
+	</sec:authorize>
+ 
+    var csrfHeaderName = "${_csrf.headerName}"; 
+    var csrfTokenValue = "${_csrf.token}";
 	
 	var modal = $(".modal");
     var modalInputReply = modal.find("input[name='reply']");
@@ -188,6 +196,7 @@ $(document).ready(function () {
     $("#addReplyBtn").on("click", function(e){
       
       	modal.find("input").val("");
+      	modal.find("input[name='replyer']").val(replyer);
       	modalInputReplyDate.closest("div").hide();
       	modal.find("button[id !='modalCloseBtn']").hide();
       
@@ -196,6 +205,10 @@ $(document).ready(function () {
       	$(".modal").modal("show");
 	});
 
+    $(document).ajaxSend(function(e, xhr, options) { 
+    	xhr.setRequestHeader(csrfHeaderName, csrfTokenValue); 
+    });
+    
     modalRegisterBtn.on("click", function(e){
 		
     	var reply = {
@@ -241,8 +254,26 @@ $(document).ready(function () {
 
 	modalModBtn.on("click", function(e){
     	  
-		var reply = {rno:modal.data("rno"), reply: modalInputReply.val()};
+		var reply = {rno:modal.data("rno"), reply: modalInputReply.val(), replyer:replyer};
    	  
+   	  	if(!replyer){
+ 			alert("로그인후 수정이 가능합니다.");
+ 		  	modal.modal("hide");
+ 		  	return;
+ 	  	}
+ 	  
+ 	  	var originalReplyer = modalInputReplyer.val();
+ 	  
+ 	  	console.log("Original Replyer: " + originalReplyer);
+ 	  
+ 	  	if(replyer  != originalReplyer){
+ 			alert("자신이 작성한 댓글만 수정이 가능합니다.");
+ 		  	modal.modal("hide");
+ 		  	return;
+ 	  	}
+   	  
+ 	  	console.log(reply);
+ 	  	
    	  	replyService.update(reply, function(result){
    	    	alert(result);
    	    	modal.modal("hide");
@@ -253,14 +284,33 @@ $(document).ready(function () {
 	
 
    	modalRemoveBtn.on("click", function (e){
-   	  
-   	  	var rno = modal.data("rno");
-   	  
-   	  	replyService.remove(rno, function(result){
-			alert(result);
-   	      	modal.modal("hide");
-   	      	showList(pageNum);
-   	  	});
+   	  	
+   	 	var rno = modal.data("rno");
+
+  		console.log("RNO: " + rno);
+  		console.log("REPLYER: " + replyer);
+  	  
+  	  	if(!replyer){
+  			alert("로그인후 삭제가 가능합니다.");
+  		  	modal.modal("hide");
+  		  	return;
+  	  	}
+  	  
+  	  	var originalReplyer = modalInputReplyer.val();
+  	  
+  	  	console.log("Original Replyer: " + originalReplyer);
+  	  
+  	  	if(replyer  != originalReplyer){
+  			alert("자신이 작성한 댓글만 삭제가 가능합니다.");
+  		  	modal.modal("hide");
+  		  	return;
+  	  	}
+  	  
+  	  	replyService.remove(rno, originalReplyer, function(result){
+  	  		alert(result);
+  	      	modal.modal("hide");
+  	      	showList(pageNum);
+  	  	});
 	});
    	
    	
